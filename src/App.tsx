@@ -33,7 +33,7 @@ import {encrypt} from 'eciesjs';
 import {LogBox} from 'react-native';
 import BackgroundTimer from 'react-native-background-timer';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {DAPPView} from './src/views/DappView';
+import {DAPPView} from './views/DappView';
 
 LogBox.ignoreLogs([]); // Ignore log notification by message
 

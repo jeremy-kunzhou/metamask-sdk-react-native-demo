@@ -58,9 +58,12 @@ export const DAPPView = ({sdk}: DAPPViewProps) => {
     if (!ethereum?.selectedAddress) {
       return;
     }
+    console.log('a');
     const bal =
       (await provider?.getBalance(ethereum?.selectedAddress)) ??
       ethers.BigNumber.from(0);
+    console.log('b');
+
     setBalance(ethers.utils.formatEther(bal));
   };
 
@@ -100,7 +103,7 @@ export const DAPPView = ({sdk}: DAPPViewProps) => {
         );
         if (ethereum.selectedAddress) {
           setAccount(ethereum?.selectedAddress);
-          getBalance();
+          // getBalance();
         }
         if (ethereum.chainId) {
           setChain(ethereum.chainId);
@@ -283,6 +286,7 @@ export const DAPPView = ({sdk}: DAPPViewProps) => {
       {connected ? (
         <>
           <Button title={'Request Accounts'} onPress={connect} />
+          <Button title="Balance" onPress={getBalance} />
           <Button title="Sign" onPress={sign} />
           <Button title="Send transaction" onPress={sendTransaction} />
           <Button title="Add chain" onPress={exampleRequest} />
