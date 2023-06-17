@@ -58,13 +58,26 @@ export const DAPPView = ({sdk}: DAPPViewProps) => {
     if (!ethereum?.selectedAddress) {
       return;
     }
-    console.log('a');
+    console.log('before all');
+    console.log('current chainId', ethereum?.chainId);
+    console.log('isConnected', ethereum.isConnected());
+
+    console.log('before eth_getBalance');
+    const result1 = (await ethereum?.request({
+      method: 'eth_getBalance',
+      params: [ethereum.selectedAddress, 'latest'],
+    })) as string[];
+    console.log('eth_getBalance RESULT', JSON.stringify(result1));
+    console.log('after eth_getBalance');
+
+    console.log('before getBalance');
     const bal =
       (await provider?.getBalance(ethereum?.selectedAddress)) ??
       ethers.BigNumber.from(0);
-    console.log('b');
+    console.log('after getBalance');
 
     setBalance(ethers.utils.formatEther(bal));
+    console.log('after all');
   };
 
   useEffect(() => {
@@ -74,6 +87,7 @@ export const DAPPView = ({sdk}: DAPPViewProps) => {
     }
 
     try {
+      console.log('a1');
       setProvider(
         new ethers.providers.Web3Provider(
           ethereum as unknown as ethers.providers.ExternalProvider,
@@ -83,21 +97,33 @@ export const DAPPView = ({sdk}: DAPPViewProps) => {
       console.debug(
         `useffect ethereum.selectedAddress=${ethereum.selectedAddress}`,
       );
+      console.log('a2');
+
       if (ethereum.selectedAddress) {
+        console.log('b1');
+
         setConnected(true);
         setAccount(ethereum.selectedAddress);
+        console.log('b11');
       }
+      console.log('a3');
 
       ethereum.on('connect', () => {
+        console.log('b2');
         setConnected(true);
+        console.log('b22');
       });
 
       ethereum.on('chainChanged', (newChain: string) => {
+        console.log('b3');
         console.log('useEffect::ethereum on "chainChanged"', newChain);
         setChain(newChain);
+        console.log('b33');
       });
+      console.log('a4');
 
       ethereum.on('_initialized', () => {
+        console.log('b4');
         console.log(
           `useEffect::ethereum on "_initialized" ethereum.selectedAddress=${ethereum.selectedAddress} ethereum.chainId=${ethereum.chainId}`,
         );
@@ -105,22 +131,32 @@ export const DAPPView = ({sdk}: DAPPViewProps) => {
           setAccount(ethereum?.selectedAddress);
           // getBalance();
         }
+        console.log('b44');
         if (ethereum.chainId) {
           setChain(ethereum.chainId);
         }
+        console.log('b444');
       });
 
+      console.log('a5');
+
       ethereum.on('accountsChanged', (accounts: string[]) => {
+        console.log('b5');
         console.log('useEffect::ethereum on "accountsChanged"', accounts);
         if (accounts.length > 0 && accounts[0] !== account) {
           setAccount(accounts?.[0]);
           getBalance();
         }
+        console.log('b55');
       });
 
+      console.log('a6');
+
       ethereum.on('disconnect', () => {
+        console.log('b6');
         console.log('useEffect::ethereum on "disconnect"');
         setConnected(false);
+        console.log('b66');
       });
 
       sdk.on(

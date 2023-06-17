@@ -18,7 +18,7 @@ import {
 import {ENV_PROJECT_ID} from '@env';
 
 import {useWeb3React} from '@web3-react/core';
-import {WalletConnectConnector} from './WalletConnectV2/walletconnect-connector';
+import {MetamaskConnector} from './MetamaskSDK/metamask-connector';
 import {MetaMaskSDK} from '@metamask/sdk';
 import {
   CommunicationLayerMessage,
@@ -118,37 +118,6 @@ function Main() {
     console.log({tokenBalance});
   }, [tokenBalance]);
 
-  // useEffect(() => {
-  //   async function getClientId() {
-  //     if (provider && isConnected) {
-  //       const _clientId = await provider?.client?.core.crypto.getClientId();
-  //       setClientId(_clientId);
-  //     } else {
-  //       setClientId(undefined);
-  //     }
-  //   }
-
-  //   getClientId();
-  // }, [isConnected, provider]);
-
-  // useEffect(() => {
-  //   if (provider && isConnected) {
-  //     console.log({
-  //       isConnected,
-  //       provider,
-  //     });
-  //     activate(
-  //       new WalletConnectConnector({
-  //         provider,
-  //         supportedChainIds: SUPPORT_CHAIN_ID,
-  //       }),
-  //     )
-  //       .then(data => console.log('activate', data))
-  //       .catch(error => console.log(error))
-  //       .finally(() => console.log('activate finished'));
-  //   }
-  // }, [isConnected, provider, activate]);
-
   useEffect(() => {
     console.log('account', account);
   }, [account]);
@@ -170,7 +139,7 @@ function Main() {
       })) as string[];
       console.log('RESULT', result?.[0]);
       activate(
-        new WalletConnectConnector({
+        new MetamaskConnector({
           provider: ethereum,
           supportedChainIds: SUPPORT_CHAIN_ID,
         }),

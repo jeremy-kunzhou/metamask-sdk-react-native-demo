@@ -11,7 +11,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@metamask/sdk": "0.2.3",
+    "@metamask/sdk": "^0.3.2",
     "@react-native-async-storage/async-storage": "^1.18.1",
     "@web3-react/core": "6",
     "bignumber.js": "^9.1.1",

@@ -1,20 +1,7 @@
 import {AbstractConnector} from '@web3-react/abstract-connector';
 import {ConnectorUpdate} from '@web3-react/types';
-// import UniversalProvider from '@walletconnect/universal-provider';
-// import WalletConnect from '@walletconnect/client';
-// import WalletConnectProvider from './ethereum-provider';
-// import {NETWORK_URLS} from '../../constants/config';
-// import {IRPCMap} from '@walletconnect/types';
 
 export const URI_AVAILABLE = 'URI_AVAILABLE';
-
-// export interface WalletConnectConnectorArguments {
-//   connector: WalletConnect;
-//   infuraId?: string;
-//   rpc?: IRPCMap;
-//   supportedChainIds: number[];
-//   chainId: number;
-// }
 
 export class UserRejectedRequestError extends Error {
   public constructor() {
@@ -24,20 +11,12 @@ export class UserRejectedRequestError extends Error {
   }
 }
 
-export class WalletConnectConnector extends AbstractConnector {
-  // public walletConnectProvider?: WalletConnectProvider;
-  // private readonly connector: WalletConnect;
-  // private chainId: number;
-  // private readonly infuraId: string;
-  // private readonly rpc: IRPCMap;
+export class MetamaskConnector extends AbstractConnector {
   private provider?: any;
 
   constructor({provider, supportedChainIds}: any) {
     super({supportedChainIds});
     this.provider = provider;
-    // this.infuraId = infuraId;
-    // this.chainId = chainId;
-    // this.rpc = rpc;
     this.handleChainChanged = this.handleChainChanged.bind(this);
     this.handleAccountsChanged = this.handleAccountsChanged.bind(this);
     this.handleDisconnect = this.handleDisconnect.bind(this);
@@ -62,7 +41,6 @@ export class WalletConnectConnector extends AbstractConnector {
     if (__DEV__) {
       console.log("Handling 'disconnect' event");
     }
-    // we have to do this because of a @walletconnect/web3-provider bug
     if (this.provider) {
       this.provider.off('disconnect', this.handleDisconnect);
       this.provider.off('chainChanged', this.handleChainChanged);
@@ -74,39 +52,10 @@ export class WalletConnectConnector extends AbstractConnector {
 
   public async activate(): Promise<ConnectorUpdate> {
     // TODO: make new universalProvider
-    // if (!this.walletConnectProvider) {
-    //   this.walletConnectProvider = new WalletConnectProvider({
-    //     connector: this.connector,
-    //     ...(this.infuraId ? {infuraId: this.infuraId} : {}),
-    //     chainId: this.chainId,
-    //     ...(this.rpc ? {rpc: this.rpc} : {}),
-    //   });
-    // }
-
-    // let status: {
-    //   accounts: string[];
-    //   chainId: number;
-    // };
-    // ensure that the uri is going to be available, and emit an event if there's a new uri
-    // jeremy: walletconnect connected before this class created
-    // if (!this.walletConnectProvider.connector.connected) {
-    // can't do createSession
-    // await this.walletConnectProvider.connector.createSession(
-    //   // this.config.chainId ? { chainId: this.config.chainId } : undefined,
-    // )
-    // follow the connector tutorial to use connect instead
-    // https://docs.walletconnect.com/quick-start/dapps/react-native
-    // status = await this.connector.connect()
-    // this.chainId = status.chainId
-    // status = await this.walletConnectProvider.connector.connect()
-    // console.log(status)
-    // no uri found
-    // this.emit(URI_AVAILABLE, this.walletConnectProvider.connector.uri)
-    // }
 
     console.log('connector activate function');
 
-    console.log('aaa', this.provider?.selectedAddress);
+    console.log('activate', this.provider?.selectedAddress);
     // let account: string
     const account = await new Promise<string>((resolve, reject) => {
       const userReject = () => {
@@ -193,10 +142,9 @@ export class WalletConnectConnector extends AbstractConnector {
   public deactivate() {
     if (!!this?.provider) {
       if (__DEV__) {
-        console.log('walletconnect-connector deactivate');
+        console.log('metamask-connector deactivate');
       }
-      // follow the connector tutorial for end session in case
-      // https://docs.walletconnect.com/quick-start/dapps/react-native
+
       this.provider.disconnect();
 
       this.provider.off('disconnect', this.handleDisconnect);
